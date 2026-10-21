@@ -1,0 +1,74 @@
+name: Build & Release (Windows exe)
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Release 标签，例如 v0.1.0（不能与已有标签重复）"
+        required: true
+        type: string
+      prerelease:
+        description: "标记为预发布"
+        required: false
+        default: false
+        type: boolean
+
+permissions:
+  contents: write
+
+env:
+  CARGO_TERM_COLOR: always
+  BIN_NAME: path2obs
+
+jobs:
+  build:
+    name: Build release exe (windows-latest)
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install Rust toolchain
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Cache cargo registry / build
+        uses: Swatinem/rust-cache@v2
+
+      - name: Build (release)
+        run: cargo build --release --locked
+
+      - name: Run tests
+        run: cargo test --release
+
+      - name: Collect artifacts
+        shell: bash
+        run: |
+          mkdir -p dist
+          cp "target/release/${BIN_NAME}.exe" "dist/${BIN_NAME}.exe"
+          cd dist
+          sha256sum "${BIN_NAME}.exe" > "${BIN_NAME}.exe.sha256"
+          ls -l
+
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ env.BIN_NAME }}-windows-x64
+          path: |
+            dist/${{ env.BIN_NAME }}.exe
+            dist/${{ env.BIN_NAME }}.exe.sha256
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ inputs.tag }}
+          name: ${{ inputs.tag }}
+          prerelease: ${{ inputs.prerelease }}
+          generate_release_notes: true
+          body: |
+            Windows x64 可执行文件，直接下载 `path2obs.exe` 即可使用。
+
+            校验：`certutil -hashfile path2obs.exe SHA256`
+          files: |
+            dist/${{ env.BIN_NAME }}.exe
+            dist/${{ env.BIN_NAME }}.exe.sha256

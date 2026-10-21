@@ -144,3 +144,15 @@ Set-Alias p2o "C:\tools\path2obs.exe"
 ```bash
 cargo test
 ```
+
+## 10. 自动构建 & 发布 exe
+
+`.github/workflows/release.yml` 提供了手动触发的 GitHub Actions：
+
+1. 打开仓库 → **Actions** → 选 **Build & Release (Windows exe)** → **Run workflow**；
+2. 输入 `tag`（如 `v0.1.0`，不能与已有标签重复），可勾选 prerelease；
+3. 工作流在 `windows-latest` 上 `cargo build --release --locked`，跑一遍测试，上传构建产物，并用该 tag 创建 Release，附件包含：
+   - `path2obs.exe`
+   - `path2obs.exe.sha256`（校验用：`certutil -hashfile path2obs.exe SHA256`）
+
+> 仓库需要开启 Actions 的写权限（`permissions: contents: write` 已在 workflow 中声明）。Release 说明会自动从提交记录生成。
