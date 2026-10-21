@@ -1,0 +1,16 @@
+[package]
+name = "path2obs"
+version = "0.1.0"
+edition = "2021"
+description = "Convert local image/video file paths into Obsidian HTML embed tags and copy them to the clipboard."
+
+[[bin]]
+name = "path2obs"
+path = "src/main.rs"
+
+[dependencies]
+arboard = "3"
+
+[profile.release]
+opt-level = "z"
+lto = true
