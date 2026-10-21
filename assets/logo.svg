@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512" role="img" aria-label="path2obs logo">
+  <defs>
+    <linearGradient id="tile" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#8B5CF6"/>
+      <stop offset="1" stop-color="#4C1D95"/>
+    </linearGradient>
+    <linearGradient id="gemLeft" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#FFFFFF"/>
+      <stop offset="1" stop-color="#F5F3FF"/>
+    </linearGradient>
+    <linearGradient id="gemRight" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#EDE9FE"/>
+      <stop offset="1" stop-color="#D8CCFF"/>
+    </linearGradient>
+  </defs>
+
+  <!-- 紫色圆角底 -->
+  <rect x="16" y="16" width="480" height="480" rx="112" fill="url(#tile)"/>
+
+  <!-- Obsidian 风格水晶的三切面 -->
+  <polygon points="256,96 132,172 132,340 256,416 256,256" fill="url(#gemLeft)"/>
+  <polygon points="256,96 380,172 256,256" fill="#FFFFFF" opacity="0.92"/>
+  <polygon points="380,172 380,340 256,416 256,256" fill="url(#gemRight)"/>
+
+  <!-- “路径”箭头：射入水晶 -->
+  <g fill="#6D28D9">
+    <rect x="150" y="244" width="170" height="24" rx="12"/>
+    <polygon points="320,220 320,292 368,256"/>
+  </g>
+</svg>

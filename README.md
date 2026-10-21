@@ -1,5 +1,7 @@
 # path2obs
 
+![logo](assets/logo.svg)
+
 把本地**图片 / 视频路径**转成 **Obsidian 可直接渲染的 HTML 嵌入标签**，结果自动写入剪贴板，回到 Obsidian 里 `Ctrl+V` 即可。
 
 ```
@@ -102,7 +104,25 @@ path2obs - < paths.txt
 - 相对路径会补全成当前目录下的绝对路径；
 - 扩展名无法识别时报错，代码不会瞎猜（可用 `--as=` 覆盖）。
 
-## 6. 小技巧
+## 6. Logo / 图标
+
+紫色水晶（Obsidian 标志的简化变形）+ 一支射入水晶的箭头，寓意「路径 → Obsidian」。
+
+| 文件 | 用途 |
+| --- | --- |
+| `assets/logo.svg` | 矢量源文件（README、网页、Obsidian 内嵌） |
+| `assets/logo.png` | 512×512 PNG |
+| `assets/logo.ico` | 多尺寸（16/24/32/48/64/128/256）Windows 图标 |
+
+- `build.rs` 会在 Windows 上通过 `winres` 把 `assets/logo.ico` 嵌进 exe，资源管理器、任务栏、快捷方式都会显示这个图标；若机器上没有资源编译器（`rc.exe` / `windres`），构建只会打印一条 warning，不影响使用。
+- 想改配色或形状：编辑 `tools/make_logo.py` 里的常量后重新生成（`assets/logo.svg` 需手工同步）：
+
+```bash
+python tools/make_logo.py
+cargo build --release
+```
+
+## 7. 小技巧
 
 在 PowerShell 里加个别名（写入 `$PROFILE`）：
 
@@ -112,14 +132,14 @@ Set-Alias p2o "C:\tools\path2obs.exe"
 
 在 Obsidian 里：粘贴到笔记的阅读视图能直接播放/显示；编辑模式下 HTML 标签同样会被渲染。若视频太大不想自动加载，`preload="metadata"` 已保证只取元数据。
 
-## 7. 退出码
+## 8. 退出码
 
 | 码 | 含义 |
 | --- | --- |
 | `0` | 全部成功 |
 | `1` | 有路径转换失败 / 读不到输入 / 剪贴板写入失败（错误信息在 stderr） |
 
-## 8. 测试
+## 9. 测试
 
 ```bash
 cargo test
